@@ -1,0 +1,4 @@
+{
+  "compilerOptions": { "composite": true, "noEmit": true, "skipLibCheck": true, "module": "NodeNext", "moduleResolution": "NodeNext", "strict": true },
+  "include": ["server/**/*.ts", "vite.config.ts"]
+}

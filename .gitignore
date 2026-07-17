@@ -1,0 +1,6 @@
+node_modules/
+dist/
+data/*.db
+data/access-code.txt
+*.log
+.env
