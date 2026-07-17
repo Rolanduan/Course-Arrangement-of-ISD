@@ -7,6 +7,10 @@
   # 将 node_modules 包含在 Functions 中
   included_files = ["node_modules/**"]
 
+[context.production.environment]
+  DB_TYPE = "postgresql"
+  DATABASE_URL = "postgresql://postgres.vxsetefeaquvxbwarmis:tiaotiao2020@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
@@ -22,8 +26,3 @@
   command = "npm run dev"
   port = 5173
   publish = "dist"
-
-# 环境变量（部署时在 Netlify 后台配置）
-# [context.production.environment]
-#   DB_TYPE = "postgresql"
-#   DATABASE_URL = "your_connection_string"
