@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Get Supabase Token</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1e1e1e; color: #fff; }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { color: #3ecf8e; }
+        button { background: #3ecf8e; color: #000; border: none; padding: 12px 24px; font-size: 16px; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #34b277; }
+        .result { margin-top: 20px; padding: 15px; background: #333; border-radius: 4px; word-break: break-all; display: none; }
+        .result.show { display: block; }
+        .copy-btn { margin-top: 10px; background: #555; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Supabase Access Token 获取工具</h1>
+        <p>点击下方按钮获取你的 Access Token</p>
+        <button onclick="getToken()">获取 Token</button>
+        <div id="result" class="result">
+            <p>你的 Access Token（复制下面的文本）：</p>
+            <code id="token"></code>
+            <button class="copy-btn" onclick="copyToken()">复制</button>
+        </div>
+    </div>
+
+    <script>
+        async function getToken() {
+            try {
+                // 打开 Supabase tokens 页面
+                window.open('https://supabase.com/dashboard/account/tokens', '_blank');
+
+                document.getElementById('result').classList.add('show');
+                document.getElementById('token').textContent = '请在打开的新页面中：
+1. 点击 "Generate new token"
+2. 输入名称（如 "scheduler"）
+3. 复制生成的 token
+4. 粘贴给 Claude';
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function copyToken() {
+            navigator.clipboard.readText().then(text => {
+                // 这里只是为了示例
+                alert('请手动复制 token');
+            });
+        }
+    </script>
+</body>
+</html>

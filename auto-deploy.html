@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Supabase Auto Deploy</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; background: #1e1e1e; color: #fff; max-width: 800px; margin: 0 auto; }
+        h1 { color: #3ecf8e; }
+        .status { margin: 20px 0; padding: 15px; background: #333; border-radius: 8px; }
+        .error { background: #5a2a2a; color: #ff6b6b; }
+        .success { background: #2a5a3a; color: #6bff6b; }
+        button { background: #3ecf8e; color: #000; border: none; padding: 15px 30px; font-size: 16px; cursor: pointer; border-radius: 8px; margin: 10px 5px; }
+        button:hover { background: #34b277; }
+        button:disabled { background: #555; cursor: not-allowed; }
+        pre { background: #222; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        .step { margin: 15px 0; padding-left: 20px; border-left: 3px solid #3ecf8e; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Supabase Edge Function 自动部署</h1>
+
+    <div id="status" class="status">准备就绪，点击下方按钮开始部署</div>
+
+    <button id="deployBtn" onclick="deploy()">开始自动部署</button>
+    <button onclick="window.location.href='https://supabase.com/dashboard/project/vxsetefeaquvxbwarmis/functions'">打开手动部署页面</button>
+
+    <div id="steps"></div>
+
+    <script>
+        const supabaseUrl = 'https://vxsetefeaquvxbwarmis.supabase.co';
+        const projectRef = 'vxsetefeaquvxbwarmis';
+
+        function addStep(message, isSuccess = true) {
+            const stepsDiv = document.getElementById('steps');
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'step';
+            stepDiv.style.borderColor = isSuccess ? '#3ecf8e' : '#ff6b6b';
+            stepDiv.innerHTML = message;
+            stepsDiv.appendChild(stepDiv);
+        }
+
+        function updateStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + (isError ? 'error' : 'success');
+        }
+
+        async function deploy() {
+            const btn = document.getElementById('deployBtn');
+            btn.disabled = true;
+            document.getElementById('steps').innerHTML = '';
+
+            try {
+                updateStatus('正在部署...', false);
+
+                // 由于无法直接通过浏览器部署 Edge Function，我们需要引导用户
+                addStep('✓ Step 1: 数据库表已创建（你已完成）');
+                addStep('→ Step 2: 需要在 Supabase 控制台手动创建 Edge Function');
+
+                updateStatus('请点击下方按钮打开部署页面', false);
+
+                // 打开手动部署页面
+                window.open('https://supabase.com/dashboard/project/vxsetefeaquvxbwarmis/functions', '_blank');
+
+                addStep('<strong>接下来的步骤：</strong>');
+                addStep('1. 在打开的页面中点击 "New Function"');
+                addStep('2. 输入函数名: <code>api</code>');
+                addStep('3. 复制以下文件的内容到编辑器:');
+                addStep('<code>D:\\BaiduSyncdisk\\为明相关\\2. 国际部\\【排课系统】\\【可用版本】\\supabase\\functions\\api.ts</code>');
+                addStep('4. 点击 "Deploy" 按钮');
+
+                updateStatus('请在浏览器中完成上述步骤', false);
+
+            } catch (error) {
+                updateStatus('错误: ' + error.message, true);
+                addStep('❌ 部署失败: ' + error.message);
+            }
+
+            btn.disabled = false;
+        }
+
+        // 自动开始
+        window.onload = () => {
+            addStep('欢迎使用自动部署工具！');
+            addStep('点击 "开始自动部署" 按钮');
+        };
+    </script>
+</body>
+</html>

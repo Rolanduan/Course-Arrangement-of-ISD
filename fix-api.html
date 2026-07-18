@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fix API - Supabase Anon Key</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1e1e1e; color: #fff; }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { color: #3ecf8e; }
+        button { background: #3ecf8e; color: #000; border: none; padding: 12px 24px; font-size: 16px; cursor: pointer; border-radius: 4px; margin: 10px 5px; }
+        button:hover { background: #34b277; }
+        .key-box { margin: 20px 0; padding: 15px; background: #333; border-radius: 4px; word-break: break-all; }
+        code { background: #444; padding: 2px 6px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 修复 API 认证</h1>
+
+        <div class="key-box">
+            <h3>请按以下步骤操作：</h3>
+
+            <p><strong>第 1 步：</strong></p>
+            <button onclick="openSupabase()">打开 Supabase API 设置页面</button>
+
+            <p><strong>第 2 步：</strong></p>
+            <p>在打开的页面中，找到 <code>Project API keys</code> 或 <code>anon public</code> 部分</p>
+
+            <p><strong>第 3 步：</strong></p>
+            <p>复制 <code>anon public</code> key（以 <code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</code> 开头）</p>
+
+            <p><strong>第 4 步：</strong></p>
+            <p>将 key 粘贴到下面：</p>
+            <input type="text" id="anonKey" style="width: 100%; padding: 10px; margin: 10px 0; background: #333; color: #fff; border: 1px solid #555; border-radius: 4px;" placeholder="粘贴 anon key 这里...">
+
+            <p><strong>第 5 步：</strong></p>
+            <button onclick="generateFix()">生成修复代码</button>
+
+            <div id="result" style="display:none; margin-top: 20px; padding: 15px; background: #2a5a3a; border-radius: 4px;">
+                <p>将以下代码替换到 <code>src/App.tsx</code> 第 17 行：</p>
+                <pre id="code" style="background: #222; padding: 10px; border-radius: 4px; overflow-x: auto;"></pre>
+                <button onclick="copyCode()">复制代码</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openSupabase() {
+            window.open('https://supabase.com/dashboard/project/vxsetefeaquvxbwarmis/settings/api', '_blank');
+        }
+
+        function generateFix() {
+            const key = document.getElementById('anonKey').value.trim();
+            if (!key || !key.startsWith('eyJ')) {
+                alert('请输入有效的 anon key（应该以 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 开头）');
+                return;
+            }
+
+            const code = `const SUPABASE_ANON_KEY='${key}';
+async function api<T>(url:string,init?:RequestInit):Promise<T>{const apiUrl='https://vxsetefeaquvxbwarmis.supabase.co/functions/v1'+url;const r=await fetch(apiUrl,{...init,headers:{'Content-Type':'application/json','Authorization':\`Bearer ${SUPABASE_ANON_KEY}\`,'apikey':SUPABASE_ANON_KEY}});const body=await r.json();if(!r.ok)throw {...body,status:r.status};return body;}`;
+
+            document.getElementById('code').textContent = code;
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function copyCode() {
+            const code = document.getElementById('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('代码已复制！');
+            });
+        }
+    </script>
+</body>
+</html>

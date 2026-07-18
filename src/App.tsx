@@ -14,8 +14,9 @@ const maxDurationAt=(slot:number)=>slot===1||slot===11?1:slot<=6?6-slot+1:10-slo
 const courseSystems=['SACE课程','AP课程','Alevel课程','IG课程','初中课程','原力学院研习课程','竞赛课程'];
 const weekPatterns=[['EVERY_WEEK','每周开课'],['ODD_WEEK','单周开课'],['EVEN_WEEK','双周开课'],['EVERY_3_WEEKS','三周一次'],['MONTHLY','每月一次']];
 const patternLabel=(value:string)=>weekPatterns.find(x=>x[0]===value)?.[1]||'每周开课';
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4c2V0ZWZlYXF1dnhid2FybWlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyOTg3NjYsImV4cCI6MjA5OTg3NDc2Nn0._TKugESPqtyI4LcSnuKi7n4nIXIE_OkgdufbFJXNm24';
-async function api<T>(url:string,init?:RequestInit):Promise<T>{const apiUrl='https://vxsetefeaquvxbwarmis.supabase.co/functions/v1'+url;const r=await fetch(apiUrl,{...init,headers:{'Content-Type':'application/json','Authorization':`Bearer ${SUPABASE_ANON_KEY}`,'apikey':SUPABASE_ANON_KEY}});const body=await r.json();if(!r.ok)throw {...body,status:r.status};return body;}
+const SUPABASE_URL='https://vxsetefeaquvxbwarmis.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4c2V0ZWZlYXF1dnhid2FybWlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyOTg3NjYsImV4cCI6MjA5OTg3NDc2Nn0._TKugESPqtyI4LcSnuKi7n4nIXIE_OkgdufbFJXNm24';
+async function api<T>(url:string,init?:RequestInit):Promise<T>{const apiUrl=`${SUPABASE_URL}/rest/v1${url.replace('/api','')}`;const r=await fetch(apiUrl,{...init,headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=representation'}});if(!r.ok)throw {status:r.status};return await r.json();}
 
 export function App(){
  const [data,setData]=useState<Data>(); const [view,setView]=useState<'dashboard'|'schedule'|'data'|'audit'>('dashboard'); const [selected,setSelected]=useState<number>(); const [notice,setNotice]=useState(''); const [busy,setBusy]=useState(false);
