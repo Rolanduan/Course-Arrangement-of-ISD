@@ -14,8 +14,33 @@ const maxDurationAt=(slot:number)=>slot===1||slot===11?1:slot<=6?6-slot+1:10-slo
 const courseSystems=['SACE课程','AP课程','Alevel课程','IG课程','初中课程','原力学院研习课程','竞赛课程'];
 const weekPatterns=[['EVERY_WEEK','每周开课'],['ODD_WEEK','单周开课'],['EVEN_WEEK','双周开课'],['EVERY_3_WEEKS','三周一次'],['MONTHLY','每月一次']];
 const patternLabel=(value:string)=>weekPatterns.find(x=>x[0]===value)?.[1]||'每周开课';
-const supabaseUrl='https://vxsetefeaquvxbwarmis.supabase.co';const supabaseKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4c2V0ZWZlYXF1dnhid2FybWlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyOTg3NjYsImV4cCI6MjA5OTg3NDc2Nn0._TKugESPqtyI4LcSnuKi7n4nIXIE_OkgdufbFJXNm24';
-async function api<T>(url:string,init?:RequestInit):Promise<T>{if(url==='/api/bootstrap'){const[teachers,students,rooms,courses,adminClasses,sections,allocations]=await Promise.all([fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.teacher&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then(r=>r.json()),fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.student&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then(r=>r.json()),fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.room&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then(r=>r.json()),fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.course&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then(r=>r.json()),fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.adminClass&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then(r=>r.json()),fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.section&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then(r=>r.json()),fetch(`${supabaseUrl}/rest/v1/allocations?select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then(r=>r.json())]);return{teachers:teachers.map(r=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),students:students.map(r=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),rooms:rooms.map(r=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),courses:courses.map(r=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),adminClasses:adminClasses.map(r=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),sections:sections.map(r=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),allocations:allocations.map(a=>({...a,locked:Boolean(a.locked)})),conflicts:[],term:{name:'2026—2027学年 第一学期',version:'初稿 V1',status:'DRAFT'}}as T;}throw{message:'Not implemented'};}
+const supabaseUrl='https://vxsetefeaquvxbwarmis.supabase.co';
+const supabaseKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4c2V0ZWZlYXF1dnhid2FybWlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyOTg3NjYsImV4cCI6MjA5OTg3NDc2Nn0._TKugESPqtyI4LcSnuKi7n4nIXIE_OkgdufbFJXNm24';
+async function api<T>(url:string,init?:RequestInit):Promise<T>{
+  if(url==='/api/bootstrap'){
+    const[teachers,students,rooms,courses,adminClasses,sections,allocations]=await Promise.all([
+      fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.teacher&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then((r:Response)=>r.json()),
+      fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.student&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then((r:Response)=>r.json()),
+      fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.room&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then((r:Response)=>r.json()),
+      fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.course&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then((r:Response)=>r.json()),
+      fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.adminClass&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then((r:Response)=>r.json()),
+      fetch(`${supabaseUrl}/rest/v1/entities?kind=eq.section&select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then((r:Response)=>r.json()),
+      fetch(`${supabaseUrl}/rest/v1/allocations?select=*`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`}}).then((r:Response)=>r.json())
+    ]);
+    return{
+      teachers:teachers.map((r:any)=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),
+      students:students.map((r:any)=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),
+      rooms:rooms.map((r:any)=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),
+      courses:courses.map((r:any)=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),
+      adminClasses:adminClasses.map((r:any)=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),
+      sections:sections.map((r:any)=>typeof r.payload==='string'?JSON.parse(r.payload):r.payload),
+      allocations:allocations.map((a:any)=>({...a,locked:Boolean(a.locked)})),
+      conflicts:[],
+      term:{name:'2026—2027学年 第一学期',version:'初稿 V1',status:'DRAFT'}
+    }as T;
+  }
+  throw{message:'Not implemented'};
+}
 
 export function App(){
  const [data,setData]=useState<Data>(); const [view,setView]=useState<'dashboard'|'schedule'|'data'|'audit'>('dashboard'); const [selected,setSelected]=useState<number>(); const [notice,setNotice]=useState(''); const [busy,setBusy]=useState(false);
