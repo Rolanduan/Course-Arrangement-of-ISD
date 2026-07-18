@@ -14,7 +14,7 @@ const maxDurationAt=(slot:number)=>slot===1||slot===11?1:slot<=6?6-slot+1:10-slo
 const courseSystems=['SACE课程','AP课程','Alevel课程','IG课程','初中课程','原力学院研习课程','竞赛课程'];
 const weekPatterns=[['EVERY_WEEK','每周开课'],['ODD_WEEK','单周开课'],['EVEN_WEEK','双周开课'],['EVERY_3_WEEKS','三周一次'],['MONTHLY','每月一次']];
 const patternLabel=(value:string)=>weekPatterns.find(x=>x[0]===value)?.[1]||'每周开课';
-async function api<T>(url:string,init?:RequestInit):Promise<T>{const r=await fetch(url,{...init,headers:{'Content-Type':'application/json'}});const body=await r.json();if(!r.ok)throw {...body,status:r.status};return body;}
+async function api<T>(url:string,init?:RequestInit):Promise<T>{const apiUrl='https://vxsetefeaquvxbwarmis.supabase.co/functions/v1'+url;const r=await fetch(apiUrl,{...init,headers:{'Content-Type':'application/json'}});const body=await r.json();if(!r.ok)throw {...body,status:r.status};return body;}
 
 export function App(){
  const [data,setData]=useState<Data>(); const [view,setView]=useState<'dashboard'|'schedule'|'data'|'audit'>('dashboard'); const [selected,setSelected]=useState<number>(); const [notice,setNotice]=useState(''); const [busy,setBusy]=useState(false);

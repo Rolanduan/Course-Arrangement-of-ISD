@@ -4,3 +4,14 @@ data/*.db
 data/access-code.txt
 *.log
 .env
+
+# Deploy artifacts
+*.zip
+*.tar.gz
+deploy-*/
+netlify-build/
+.netlify/
+
+# Build outputs
+src/*.tsbuildinfo
+tsconfig.*.tsbuildinfo
